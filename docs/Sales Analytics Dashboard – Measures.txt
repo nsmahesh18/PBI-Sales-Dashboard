@@ -1,0 +1,59 @@
+Note : Low box shipments/LBS is no of boxes sold which is less than 50.
+
+------------------------------** Measures **------------------------------
+
+Total Sales = SUM(shipments[Sales])
+
+Total Boxes = SUM(shipments[Boxes])
+
+Total Shipments = COUNTROWS(shipments)
+
+Total Cost = SUM(shipments[Cost])
+
+Total Profit = [Total Sales] - [Total Cost]
+
+Profit % = DIVIDE([Total Profit],[Total Sales])
+
+LowBoxShipments = COUNTROWS(FILTER(shipments,shipments[Boxes] < 50))
+
+LBS% = ([LowBoxShipments]/[Total Shipments])
+
+Total Sales Previous Month = CALCULATE([Total Sales],PREVIOUSMONTH('calendar'[Date]))
+
+MoM Sales Change % = var this_month = [Total Sales]
+    		     var prev_month = [Total Sales Previous Month]
+    		     return 
+       			divide((this_month - prev_month),prev_month)
+
+MoM Boxes Change % = var this_month = [Total Boxes]
+    		     var prev_month = CALCULATE([Total Boxes],PREVIOUSMONTH('calendar'[Date]))
+    		     return 
+       			divide((this_month - prev_month),prev_month)
+
+MoM Cost Change % = var this_month = [Total Cost]
+    		    var prev_month = CALCULATE([Total Cost],PREVIOUSMONTH('calendar'[Date]))
+    		    return 
+       			divide((this_month - prev_month),prev_month)
+
+MoM Profit Change % = var this_month = [Total Profit]
+    		      var prev_month = CALCULATE([Total Profit],PREVIOUSMONTH('calendar'[Date]))
+    		      return 
+       			divide((this_month - prev_month),prev_month)
+
+MoM Shipments Change % = var this_month = [Total Shipments]
+    			 var prev_month = CALCULATE([Total Shipments],PREVIOUSMONTH('calendar'[Date]))
+    			 return 
+			    divide((this_month - prev_month),prev_month)
+
+
+Latest Date = LASTDATE('calendar'[Start of Month])
+
+Total Sales Latest Month = var ld = [Latest Date]
+    			   return
+        			CALCULATE([Total Sales],'calendar'[Start of Month] = ld)
+
+Latest Month MoM sales change = var ld = [Latest Date]
+        			var this_month = [Total Sales Latest Month]
+        			var prev_month = CALCULATE([Total Sales],'calendar'[Start of Month] = edate (ld,-1))
+        			return
+            			   divide(this_month - prev_month,prev_month)
